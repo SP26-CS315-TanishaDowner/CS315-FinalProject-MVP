@@ -1,0 +1,70 @@
+# =========================
+# Node modules
+# =========================
+node_modules/
+**/node_modules/
+
+# =========================
+# Build / dist folders
+# =========================
+dist/
+build/
+out/
+.vite/
+
+# =========================
+# Logs
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Environment variables (IMPORTANT)
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Misc
+# =========================
+coverage/
+.cache/
+.tmp/
+temp/
+
+# =========================
+# Frontend specific (Vite / React)
+# =========================
+front-end/**/dist/
+front-end/**/.vite/
+
+# =========================
+# Backend specific
+# =========================
+back-end/**/node_modules/
+
+# =========================
+# Python (if you still have that email_validator.py)
+# =========================
+__pycache__/
+*.pyc
