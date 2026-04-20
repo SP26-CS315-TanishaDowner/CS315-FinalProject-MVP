@@ -25,6 +25,8 @@ Current API endpoints:
 
 ### Option 1: Run with Docker Compose (recommended)
 
+*NB : Ensure Docker Desktop is Running for Image and Container to be built otherwise it would error*
+
 1. Open a terminal in the project root folder.
 2. Build and start both services:
 
