@@ -15,18 +15,28 @@ function App() {
 
   // POST ticket
   const addTicket = () => {
+    const title = newTicket.trim();
+    if (!title) {
+      return;
+    }
+
     fetch(`${apiBaseUrl}/api/tickets`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ title: newTicket })
+      body: JSON.stringify({ title })
     })
       .then(res => res.json())
       .then(data => {
         setTickets([...tickets, data]);
         setNewTicket("");
       });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addTicket();
   };
 
   return (
@@ -40,7 +50,7 @@ function App() {
           </p>
         </header>
 
-        <section className="composer" aria-label="Add a ticket">
+        <form className="composer" aria-label="Add a ticket" onSubmit={handleSubmit}>
           <label className="visually-hidden" htmlFor="ticket-input">
             New ticket
           </label>
@@ -51,8 +61,8 @@ function App() {
             placeholder="Enter ticket"
           />
 
-          <button onClick={addTicket}>Add Ticket</button>
-        </section>
+          <button type="submit">Add Ticket</button>
+        </form>
 
         <section className="ticket-list" aria-label="Current tickets">
           {tickets.length === 0 ? (
