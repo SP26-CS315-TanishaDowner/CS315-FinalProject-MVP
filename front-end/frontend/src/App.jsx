@@ -3,17 +3,18 @@ import { useEffect, useState } from "react";
 function App() {
   const [tickets, setTickets] = useState([]);
   const [newTicket, setNewTicket] = useState("");
+  const apiBaseUrl = "http://localhost:5002";
 
   // GET tickets
   useEffect(() => {
-    fetch("http://localhost:5000/api/tickets")
+    fetch(`${apiBaseUrl}/api/tickets`)
       .then(res => res.json())
       .then(data => setTickets(data));
   }, []);
 
   // POST ticket
   const addTicket = () => {
-    fetch("http://localhost:5000/api/tickets", {
+    fetch(`${apiBaseUrl}/api/tickets`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
