@@ -16,9 +16,7 @@ function App() {
   // POST ticket
   const addTicket = () => {
     const title = newTicket.trim();
-    if (!title) {
-      return;
-    }
+    if (!title) return;
 
     fetch(`${apiBaseUrl}/api/tickets`, {
       method: "POST",
@@ -31,6 +29,33 @@ function App() {
       .then(data => {
         setTickets([...tickets, data]);
         setNewTicket("");
+      });
+  };
+
+  // DELETE ticket
+  const deleteTicket = (id) => {
+    fetch(`${apiBaseUrl}/api/tickets/${id}`, {
+      method: "DELETE"
+    }).then(() => {
+      setTickets(tickets.filter(t => t.id !== id));
+    });
+  };
+
+  // UPDATE ticket
+  const updateTicket = (id) => {
+    const newTitle = prompt("Enter new ticket name:");
+    if (!newTitle) return;
+
+    fetch(`${apiBaseUrl}/api/tickets/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ title: newTitle })
+    })
+      .then(res => res.json())
+      .then(updated => {
+        setTickets(tickets.map(t => t.id === id ? updated : t));
       });
   };
 
@@ -50,21 +75,16 @@ function App() {
           </p>
         </header>
 
-        <form className="composer" aria-label="Add a ticket" onSubmit={handleSubmit}>
-          <label className="visually-hidden" htmlFor="ticket-input">
-            New ticket
-          </label>
+        <form className="composer" onSubmit={handleSubmit}>
           <input
-            id="ticket-input"
             value={newTicket}
             onChange={(e) => setNewTicket(e.target.value)}
             placeholder="Enter ticket"
           />
-
           <button type="submit">Add Ticket</button>
         </form>
 
-        <section className="ticket-list" aria-label="Current tickets">
+        <section className="ticket-list">
           {tickets.length === 0 ? (
             <div className="empty-state">
               <span className="empty-badge">No tickets yet</span>
@@ -75,6 +95,16 @@ function App() {
               <article className="ticket-item" key={ticket.id}>
                 <span className="ticket-id">#{ticket.id}</span>
                 <p>{ticket.title}</p>
+
+                {/* 🔥 NEW BUTTONS */}
+                <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+                  <button onClick={() => updateTicket(ticket.id)}>
+                    Edit
+                  </button>
+                  <button onClick={() => deleteTicket(ticket.id)}>
+                    Delete
+                  </button>
+                </div>
               </article>
             ))
           )}
