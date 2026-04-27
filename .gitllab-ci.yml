@@ -4,7 +4,7 @@ stages:
  
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKERHUB_IMAGE: yourusername/yourimage  # Replace with your Docker Hub image name
+  DOCKERHUB_IMAGE: tdowner93/ticketing-system-devops  # Replace with your Docker Hub image name
  
 build_image:
   stage: build
