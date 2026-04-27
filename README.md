@@ -76,9 +76,9 @@ Current API endpoints:
 
 8. When finished, stop both terminals with Ctrl+C.
 
-## Automated Tests
+## Automated Functional Tests
 
-This project includes automated tests for both back-end and front-end.
+The back-end includes automated functional API tests.
 
 ### What is covered
 - `GET /health` returns a healthy status.
@@ -87,9 +87,8 @@ This project includes automated tests for both back-end and front-end.
 - `DELETE /api/tickets/:id` removes a ticket.
 - `PUT /api/tickets/:id` updates a ticket.
 - `PUT /api/tickets/:id` returns `404` for an invalid ticket ID.
-- Front-end component test verifies the main `Ticket List` screen renders and performs initial data load.
 
-### Back-end tests (SQL-backed)
+### How to run the tests (step by step)
 
 1. Open a terminal in the project root.
 2. Start the MySQL container (required for SQL-backed tests):
@@ -99,12 +98,6 @@ This project includes automated tests for both back-end and front-end.
 3. Confirm the database is healthy (optional check):
 
    docker compose ps db
-
-#### Option A: Run from project root
-
-   npm --prefix back-end test
-
-#### Option B: `cd` into back-end
 
 4. Go to the back-end folder:
 
@@ -120,22 +113,33 @@ This project includes automated tests for both back-end and front-end.
 
 7. Confirm all tests pass in the output.
 
-### Front-end tests
+### Alternative from project root
 
-#### Option A: Run from project root
+You can also run backend tests without changing directories:
 
-   npm --prefix front-end/frontend run test
+   npm --prefix back-end test
 
-#### Option B: `cd` into front-end
+## Front-End Test
 
-1. Go to the front-end app folder:
+The front-end includes a basic automated UI test that checks the empty state and adding a ticket.
+
+### How to run it
+
+1. Open a terminal in the project root.
+2. Go to the front-end app folder:
 
    cd front-end/frontend
 
-2. Install dependencies (if needed):
+3. Install dependencies if needed:
 
    npm install
 
-3. Run the test suite:
+4. Run the test suite:
 
    npm test
+
+### Alternative from project root
+
+You can also run the front-end test without changing directories:
+
+   npm --prefix front-end/frontend test
