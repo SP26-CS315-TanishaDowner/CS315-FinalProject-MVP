@@ -2,12 +2,30 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const request = require("supertest");
 
-const { app, resetTickets } = require("./server");
+process.env.DB_HOST = process.env.DB_HOST || "127.0.0.1";
+process.env.DB_USER = process.env.DB_USER || "root";
+process.env.DB_PASSWORD = process.env.DB_PASSWORD || "root";
+process.env.DB_NAME = process.env.DB_NAME || "tickets_db";
 
-test.beforeEach(() => {
-  resetTickets();
+const { app, resetTickets, closeDb } = require("./server");
+
+test.beforeEach(async () => {
+  await resetTickets();
 });
 
+test.after(async () => {
+  await closeDb();
+});
+
+// Test for health check endpoint
+test("GET /health returns an OK status", async () => {
+  const response = await request(app).get("/health");
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(response.body, { status: "ok" });
+});
+
+// Test for GET /api/tickets endpoint
 test("GET /api/tickets returns an empty list initially", async () => {
   const response = await request(app).get("/api/tickets");
 
@@ -17,6 +35,7 @@ test("GET /api/tickets returns an empty list initially", async () => {
   assert.deepEqual(response.body, []);
 });
 
+// Additional tests for POST, DELETE, and PUT endpoints
 test("POST /api/tickets creates and returns a new ticket", async () => {
   const createResponse = await request(app)
     .post("/api/tickets")
@@ -37,6 +56,7 @@ test("POST /api/tickets creates and returns a new ticket", async () => {
   });
 });
 
+// Test for deleting a ticket
 test("DELETE /api/tickets removes a ticket", async () => {
   const createResponse = await request(app)
     .post("/api/tickets")
@@ -53,6 +73,7 @@ test("DELETE /api/tickets removes a ticket", async () => {
   assert.equal(listResponse.body.length, 0);
 });
 
+// Test for updating a ticket
 test("PUT /api/tickets updates a ticket", async () => {
   const createResponse = await request(app)
     .post("/api/tickets")
@@ -68,6 +89,7 @@ test("PUT /api/tickets updates a ticket", async () => {
   assert.equal(updateResponse.body.title, "New title");
 });
 
+// Test for non-existent ticket; returning 404
 test("PUT /api/tickets returns 404 for invalid id", async () => {
   const response = await request(app)
     .put("/api/tickets/999")
@@ -75,3 +97,7 @@ test("PUT /api/tickets returns 404 for invalid id", async () => {
 
   assert.equal(response.status, 404);
 });
+
+
+
+

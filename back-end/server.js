@@ -1,12 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔥 Create MySQL connection
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+// Create MySQL connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -14,7 +20,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-// 🔥 Connect to MySQL
+// Connect to MySQL
 db.connect((err) => {
   if (err) {
     console.error("MySQL connection error:", err);
@@ -68,8 +74,11 @@ app.put("/api/tickets/:id", (req, res) => {
   db.query(
     "UPDATE tickets SET title = ? WHERE id = ?",
     [title, id],
-    (err) => {
+    (err, result) => {
       if (err) return res.status(500).json(err);
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
 
       res.json({ id, title });
     }
@@ -77,12 +86,20 @@ app.put("/api/tickets/:id", (req, res) => {
 });
 
 // RESET (for tests)
-function resetTickets() {
-  db.query("DELETE FROM tickets");
+async function resetTickets() {
+  await db.promise().query("DELETE FROM tickets");
+  await db.promise().query("ALTER TABLE tickets AUTO_INCREMENT = 1");
+}
+
+async function closeDb() {
+  await db.promise().end();
 }
 
 if (require.main === module) {
   app.listen(5002, () => console.log("Server running on port 5002"));
 }
 
-module.exports = { app, resetTickets };
+module.exports = { app, resetTickets, closeDb };
+
+
+

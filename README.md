@@ -81,22 +81,40 @@ Current API endpoints:
 The back-end includes automated functional API tests.
 
 ### What is covered
-- Test 1: `GET /api/tickets` returns an empty ticket list initially.
-- Test 2: `POST /api/tickets` creates a ticket, then `GET /api/tickets` confirms it was added.
+- `GET /health` returns a healthy status.
+- `GET /api/tickets` returns an empty ticket list initially.
+- `POST /api/tickets` creates and returns a new ticket.
+- `DELETE /api/tickets/:id` removes a ticket.
+- `PUT /api/tickets/:id` updates a ticket.
+- `PUT /api/tickets/:id` returns `404` for an invalid ticket ID.
 
 ### How to run the tests (step by step)
 
 1. Open a terminal in the project root.
-2. Go to the back-end folder:
+2. Start the MySQL container (required for SQL-backed tests):
+
+   docker compose up -d db
+
+3. Confirm the database is healthy (optional check):
+
+   docker compose ps db
+
+4. Go to the back-end folder:
 
    cd back-end
 
-3. Install dependencies (including test dependency):
+5. Install dependencies (if needed):
 
    npm install
 
-4. Run the test suite:
+6. Run the test suite:
 
    npm test
 
-5. Confirm output shows passing tests (for example, `pass 2`).
+7. Confirm all tests pass in the output.
+
+### Alternative from project root
+
+You can also run backend tests without changing directories:
+
+   npm --prefix back-end test
