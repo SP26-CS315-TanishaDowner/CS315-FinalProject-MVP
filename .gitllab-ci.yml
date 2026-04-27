@@ -1,0 +1,30 @@
+stages:
+  - build
+  - push
+ 
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKERHUB_IMAGE: yourusername/yourimage  # Replace with your Docker Hub image name
+ 
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+    - docker build -t $DOCKERHUB_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker tag $DOCKERHUB_IMAGE:$CI_COMMIT_REF_SLUG $DOCKERHUB_IMAGE:latest
+    - docker push $DOCKERHUB_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $DOCKERHUB_IMAGE:latest
+ 
+push_image:
+  stage: push
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+    - docker pull $DOCKERHUB_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker tag $DOCKERHUB_IMAGE:$CI_COMMIT_REF_SLUG $DOCKERHUB_IMAGE:stable
+    - docker push $DOCKERHUB_IMAGE:stable
