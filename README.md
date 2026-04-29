@@ -81,7 +81,7 @@ Current API endpoints:
 The back-end includes automated functional API tests.
 
 ### What is covered
-- Test 1: `GET /api/tickets` returns an empty ticket list initially.
+- Test 1: `GET /api/tickets` returns the default ticket list.
 - Test 2: `POST /api/tickets` creates a ticket, then `GET /api/tickets` confirms it was added.
 
 ### How to run the tests (step by step)

@@ -5,9 +5,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let tickets = [];
+let tickets = [
+  { id: 1, title: "Printer not working" },
+  { id: 2, title: "Password reset" }
+];
 
-const initialTickets = [];
+const initialTickets = [
+  { id: 1, title: "Printer not working" },
+  { id: 2, title: "Password reset" }
+];
 
 app.get("/api/tickets", (req, res) => {
   res.json(tickets);

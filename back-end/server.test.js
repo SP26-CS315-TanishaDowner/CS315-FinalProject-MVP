@@ -8,13 +8,13 @@ test.beforeEach(() => {
   resetTickets();
 });
 
-test("GET /api/tickets returns an empty list initially", async () => {
+test("GET /api/tickets returns default tickets", async () => {
   const response = await request(app).get("/api/tickets");
 
   assert.equal(response.status, 200);
   assert.equal(Array.isArray(response.body), true);
-  assert.equal(response.body.length, 0);
-  assert.deepEqual(response.body, []);
+  assert.equal(response.body.length, 2);
+  assert.deepEqual(response.body[0], { id: 1, title: "Printer not working" });
 });
 
 test("POST /api/tickets creates and returns a new ticket", async () => {
@@ -24,15 +24,15 @@ test("POST /api/tickets creates and returns a new ticket", async () => {
 
   assert.equal(createResponse.status, 200);
   assert.deepEqual(createResponse.body, {
-    id: 1,
+    id: 3,
     title: "Laptop battery issue"
   });
 
   const listResponse = await request(app).get("/api/tickets");
   assert.equal(listResponse.status, 200);
-  assert.equal(listResponse.body.length, 1);
-  assert.deepEqual(listResponse.body[0], {
-    id: 1,
+  assert.equal(listResponse.body.length, 3);
+  assert.deepEqual(listResponse.body[2], {
+    id: 3,
     title: "Laptop battery issue"
   });
 });
