@@ -1,13 +1,47 @@
-version: "3"
+version: "3.8"
+
 services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tickets_db
+    ports:
+    - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./back-end/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   backend:
     build:
       context: ./back-end
+    container_name: backend_api
     ports:
       - "5002:5002"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: tickets_db
+      DB_USER: root
+      DB_PASSWORD: root
+    restart: always
 
   frontend:
     build:
       context: ./front-end/frontend
+    container_name: frontend_app
     ports:
       - "5173:5173"
+    restart: always
+
+volumes:
+  db_data:
