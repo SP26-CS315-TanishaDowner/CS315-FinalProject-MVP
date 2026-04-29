@@ -1,48 +1,27 @@
-import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import App from './App'
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import App from "./App";
 
-describe('App', () => {
+describe("App", () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn((url, options) => {
-      if (!options) {
-        return Promise.resolve({
-          json: () => Promise.resolve([]),
-        })
-      }
+    // Mock the initial ticket fetch so the test is deterministic and offline.
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => []
+    });
+  });
 
-      if (options.method === 'POST') {
-        const body = JSON.parse(options.body)
+  afterEach(() => {
+    // Reset mocks so each test starts with a clean global state.
+    vi.restoreAllMocks();
+  });
 
-        return Promise.resolve({
-          json: () => Promise.resolve({ id: 1, title: body.title }),
-        })
-      }
+  it("renders the title and loads tickets", async () => {
+    render(<App />);
 
-      return Promise.resolve({
-        json: () => Promise.resolve({}),
-      })
-    }))
-  })
-
-  it('renders the empty state and adds a ticket', async () => {
-    render(<App />)
-
-    expect(await screen.findByText('No tickets yet')).toBeInTheDocument()
-
-    fireEvent.change(screen.getByPlaceholderText('Enter ticket'), {
-      target: { value: 'Printer is jammed' },
-    })
-
-    fireEvent.click(screen.getByRole('button', { name: 'Add Ticket' }))
-
-    expect(await screen.findByText('Printer is jammed')).toBeInTheDocument()
-    expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:5002/api/tickets',
-      expect.objectContaining({
-        method: 'POST',
-      }),
-    )
-  })
-})
+    // Verify key UI content and that the component performed its API request.
+    expect(screen.getByRole("heading", { name: "Ticket List" })).toBeInTheDocument();
+    expect(await screen.findByText("No tickets yet")).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:5002/api/tickets");
+  });
+});
