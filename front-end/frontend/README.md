@@ -1,84 +1,16 @@
-# CS315 Final Project MVP
+# React + Vite
 
-## Project Name
-CS315 Final Project MVP - Ticket List Application
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Description
-This project is a simple full-stack ticket tracking MVP.
+Currently, two official plugins are available:
 
-- The front end is a React app (Vite) where users can:
-  - View a list of support tickets
-  - Add a new ticket
-- The back end is an Express API that:
-  - Stores tickets in memory
-  - Serves ticket data through REST endpoints
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-Current API endpoints:
-- GET /api/tickets
-- POST /api/tickets
+## React Compiler
 
-## Authors
-- Marc Robertson
-- Tanisha Downer
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## AI Usage
-This project utilized AI for assistance in:
-- Generating boilerplate for the React front-end
-- Configuring Express.js API endpoints in the back-end
-- Debugging and fixing code issues
-- Troublshooting Docker configurations
+## Expanding the ESLint configuration
 
-## How to Run the Program
-
-### Option 1: Run with Docker Compose (recommended)
-
-*NB : Ensure Docker Desktop is Running for Image and Container to be built otherwise it would error*
-
-1. Open a terminal in the project root folder.
-2. Build and start both services:
-
-   docker compose up --build
-
-3. Open the app in your browser:
-
-   http://localhost:5173
-
-4. Use the UI to view and add tickets.
-5. Stop the app with Ctrl+C in the terminal.
-
-### Option 2: Run Locally Without Docker
-
-#### Prerequisites
-- Node.js installed (includes npm)
-
-#### Step-by-step
-
-1. Open terminal #1 and go to the back-end folder:
-
-   cd back-end
-
-2. Install back-end dependencies:
-
-   npm install
-
-3. Start the back-end server:
-
-   node server.js
-
-4. Open terminal #2 and go to the front-end app folder:
-
-   cd "front-end/front-end app"
-
-5. Install front-end dependencies:
-
-   npm install
-
-6. Start the front-end development server:
-
-   npm run dev
-
-7. Open the app in your browser:
-
-   http://localhost:5173
-
-8. When finished, stop both terminals with Ctrl+C.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
